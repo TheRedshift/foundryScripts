@@ -96,8 +96,8 @@ function getSpellSlots(actor, level) {
   function smite(actor, slotLevel, criticalHit, weak) {
 
     let numDice = slotLevel + 1;
-    if (criticalHit) numDice *= 2;
     if (weak) numDice += 1;
+    if (criticalHit) numDice *= 2;
     const flavor = `Purpose Divine Smite - ${game.i18n.localize("DND5E.DamageRoll")} (${game.i18n.localize("DND5E.DamageRadiant")})`;
     new Roll(`${numDice}d8`).roll().toMessage({ flavor: flavor, speaker });
     
