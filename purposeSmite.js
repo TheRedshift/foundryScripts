@@ -33,7 +33,7 @@ if (hasAvailableSlot(s_actor)) {
             </div>
             <div class="form-group">
                 <label class="checkbox">
-                <input type="checkbox" name="outerTargetCheckbox"/>` + game.i18n.localize("Outer Target") + "?" + `</label>
+                <input type="checkbox" name="weakCheckbox"/>` + "Fiend or Undead?" + `</label>
             </div>
         </form>
         `,
@@ -54,8 +54,9 @@ if (hasAvailableSlot(s_actor)) {
             if (confirmed) {
                 const slotLevel = parseInt(html.find('[name=slot-level]')[0].value);
                 const criticalHit = html.find('[name=criticalCheckbox]')[0].checked;				
-                const outerTarget = html.find('[name=outerTargetCheckbox]')[0].checked;
-                smite(s_actor, slotLevel, criticalHit, outerTarget);
+                const weak = html.find('[name=weakCheckbox]')[0].checked;
+
+                smite(s_actor, slotLevel, criticalHit, weak);
             }
         }
     }).render(true);
@@ -89,22 +90,17 @@ function getSpellSlots(actor, level) {
  * @param {Actor5e} actor - the actor that is performing the action.
  * @param {integer} slotLevel - the spell slot level to use when smiting.
  * @param {boolean} criticalHit - whether the hit is a critical hit.
+ * @param {boolean} weak - whether the target takes an extra 1d8 from being a Fiend or Undead
  */
 
-  function smite(actor, slotLevel, criticalHit) {
+  function smite(actor, slotLevel, criticalHit, weak) {
 
     let numDice = slotLevel + 1;
     if (criticalHit) numDice *= 2;
+    if (weak) numDice += 1;
     const flavor = `Purpose Divine Smite - ${game.i18n.localize("DND5E.DamageRoll")} (${game.i18n.localize("DND5E.DamageRadiant")})`;
     new Roll(`${numDice}d8`).roll().toMessage({ flavor: flavor, speaker });
     
-    
-
-    if (consume){
-        let objUpdate = new Object();
-        objUpdate['data.spells.spell' + slotLevel + '.value'] = chosenSpellSlots.value - 1;
-        actor.update(objUpdate);
-    }
 }
 
 })();
