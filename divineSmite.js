@@ -35,7 +35,7 @@ if (hasAvailableSlot(s_actor)) {
             </div>
             <div class="form-group">
                 <label class="checkbox">
-                <input type="checkbox" name="improvedSmiteCheckbox checked"/>` + "Improved Divine Smite?" + `</label>
+                <input type="checkbox" name="improvedSmiteCheckbox" checked/>` + "Improved Divine Smite?" + `</label>
             </div>
             <div class="form-group">
                 <label class="checkbox">
@@ -68,7 +68,7 @@ if (hasAvailableSlot(s_actor)) {
                 const improvedSmite = html.find('[name=improvedSmiteCheckbox]')[0].checked;
                 const weak = html.find('[name=weakCheckbox]')[0].checked;
 
-                smite(s_actor, slotLevel, criticalHit, consumeSlot. improvedSmite, weak);
+                smite(s_actor, slotLevel, criticalHit, consumeSlot, improvedSmite, weak);
             }
         }
     }).render(true);
