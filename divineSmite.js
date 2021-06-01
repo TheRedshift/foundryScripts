@@ -123,9 +123,9 @@ function getSpellSlots(actor, level) {
     }
 
     let numDice = slotLevel + 1;
-    if (criticalHit) numDice *= 2;
     if (improvedSmite) numDice += 1;
     if (weak) numDice += 1;
+    if (criticalHit) numDice *= 2;
     const flavor = `Macro Divine Smite - ${game.i18n.localize("DND5E.DamageRoll")} (${game.i18n.localize("DND5E.DamageRadiant")})`;
     new Roll(`${numDice}d8`).roll().toMessage({ flavor: flavor, speaker });
     
