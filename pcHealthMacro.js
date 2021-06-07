@@ -5,7 +5,7 @@
 // Initalize variables.
 let pcArray = [];
 let messageContentPC = "";
-let messageHeaderPC = "<tr><th>HP</th><th>Current</th><th>Max</th></tr>";
+let messageHeaderPC = "<tr><th>HP</th><th>Current</th><th>Temp</th><th>Current Total</th><th>Max</th></tr>";
 
 // Gather tokens in the current scene into an array.
 let tokens = canvas.tokens.placeables.filter((token) => token.data);
@@ -17,6 +17,7 @@ for (let count of tokens) {
   let tokenHealth = count.actor.data.data.attributes.hp;
   
   if(tokenType === "character") {
+      tokenHealth["total"] = tokenHealth.value + tokenHealth.temp
     pcArray.push({ name: tokenName, health: tokenHealth });
   } 
 }
@@ -26,7 +27,7 @@ sortArray(pcArray);
 
 // Build chat message, with PCs first, then NPCs.
 for (let numPC of pcArray) {
-  messageContentPC += `<tr><td>${numPC.name}</td><td>${numPC.health.value}</td><td>${numPC.health.max}</td></tr>`;
+  messageContentPC += `<tr><td>${numPC.name}</td><td>${numPC.health.value}</td><td>${numPC.health.temp ?? 0}</td><td>${numPC.health.total}</td><td>${numPC.health.max}</td></tr>`;
 }
 
 
@@ -58,6 +59,6 @@ ChatMessage.create(chatData, {});
 
     // Sort array by health
     checkArray.sort(function (a, b) {
-      return b.health.value - a.health.value;
+      return a.health.value - b.health.value;
     });
   }
