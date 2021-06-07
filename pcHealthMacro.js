@@ -16,6 +16,7 @@ for (let count of tokens) {
   let tokenName = count.data.name;
   let tokenHealth = count.actor.data.data.attributes.hp;
   
+  //TODO change to use player check
   if(tokenType === "character") {
       tokenHealth["total"] = tokenHealth.value + tokenHealth.temp
     pcArray.push({ name: tokenName, health: tokenHealth });
