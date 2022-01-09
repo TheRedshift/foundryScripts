@@ -15,22 +15,25 @@ new Dialog({
 	default:'yes',
 	close: async html => {
 		const result = html.find('input[name=\'inputField\']');
-		let chatMessages = [];
-		const doggos = result.val()
-
-		for (let i = 0; i < doggos; i++) {
-			let roll = new Roll(`2d20`);
-			roll = await roll.evaluate({async: true});
-			chatMessages.push(
-				roll.toMessage({
-					flavor: `Doggo ${i}/${doggos} Attacks!`
-				},
-				{
-					create: true
-				})
-			);
-		}
-		
-		await Promise.allSettled(chatMessages);
+		const doggos = result.val();
+		await doggosAttack(doggos);
 }
 }).render(true);
+
+
+async function doggosAttack(numberOfDoggos) {
+	let chatMessages = [];
+	for (let i = 0; i < numberOfDoggos; i++) {
+		let roll = new Roll(`2d20`);
+		roll = await roll.evaluate({async: true});
+		chatMessages.push(
+			roll.toMessage({
+				flavor: `Doggo ${i + 1}/${numberOfDoggos} Attacks!`
+			},
+			{
+				create: true
+			})
+		);
+	}
+	await Promise.allSettled(chatMessages);
+}
