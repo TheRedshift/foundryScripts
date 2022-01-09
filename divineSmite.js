@@ -60,7 +60,7 @@ if (hasAvailableSlot(s_actor)) {
             }
         },
         default: "Cancel",
-        close: html => {
+        close: async html => {
             if (confirmed) {
                 const slotLevel = parseInt(html.find('[name=slot-level]')[0].value);
                 const criticalHit = html.find('[name=criticalCheckbox]')[0].checked;				
@@ -68,7 +68,7 @@ if (hasAvailableSlot(s_actor)) {
                 const improvedSmite = html.find('[name=improvedSmiteCheckbox]')[0].checked;
                 const weak = html.find('[name=weakCheckbox]')[0].checked;
 
-                smite(s_actor, slotLevel, criticalHit, consumeSlot, improvedSmite, weak);
+                await smite(s_actor, slotLevel, criticalHit, consumeSlot, improvedSmite, weak);
             }
         }
     }).render(true);
@@ -114,7 +114,7 @@ function getSpellSlots(actor, level) {
  * @param {boolean} weak - whether the target takes an extra 1d8 from being a Fiend or Undead
  */
 
-  function smite(actor, slotLevel, criticalHit, consume, improvedSmite, weak) {
+  async function smite(actor, slotLevel, criticalHit, consume, improvedSmite, weak) {
     let chosenSpellSlots = getSpellSlots(actor, slotLevel);
 
     if (chosenSpellSlots.value < 1) {
@@ -127,7 +127,9 @@ function getSpellSlots(actor, level) {
     if (weak) numDice += 1;
     if (criticalHit) numDice *= 2;
     const flavor = `Macro Divine Smite - ${game.i18n.localize("DND5E.DamageRoll")} (${game.i18n.localize("DND5E.DamageRadiant")})`;
-    new Roll(`${numDice}d8`).roll().toMessage({ flavor: flavor, speaker });
+    let roll = new Roll(`${numDice}d8`)
+    roll = await roll.roll({async: true})
+    await roll.toMessage({ flavor: flavor, speaker });
     
 
     if (consume){
