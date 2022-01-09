@@ -1,8 +1,8 @@
-let dialogEditor = new Dialog({
+new Dialog({
     title: `Toll the Deader`,
     content: `Is the target damaged?`,
     buttons: {
-      torch: {
+        torch: {
         label: `No`,
         callback: async () => {
           let target = canvas.tokens.controlled[0]?.actor;
@@ -31,6 +31,4 @@ let dialogEditor = new Dialog({
     },
     default: "close",
     close: () => {}
-  });
-  
-  dialogEditor.render(true);
+}).render(true);
