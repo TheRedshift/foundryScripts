@@ -18,8 +18,8 @@
             }
         }
 
-        let dialogEditor = new Dialog({
-            title: `Multi Window Test`,
+        new Dialog({
+            title: `Divine Smite`,
             content: `
             <form id="multi-window-form">
                 <p>` + game.i18n.format("DND5E.AbilityUseHint", {name: "Divine Smite", type: "feature"}) + `</p>
@@ -86,7 +86,7 @@
      * @returns {object} contains value (number of slots remaining), max, and override.
      */
     function getSpellSlots(actor, level) {
-        return actor.data.data.spells[`spell${level}`];
+        return actor.system.spells[`spell${level}`];
     }
 
     /**
@@ -95,8 +95,8 @@
      * @returns {boolean} True if any spell slots of any spell level are available to be used.
      */
     function hasAvailableSlot(actor) {
-        for (let slot in actor.data.data.spells) {
-            if (actor.data.data.spells[slot].value > 0) {
+        for (let slot in actor.system.spells) {
+            if (actor.system.spells[slot].value > 0) {
                 return true;
             }
         }
@@ -127,13 +127,13 @@
         if (criticalHit) numDice *= 2;
         const flavor = `Macro Divine Smite - ${game.i18n.localize("DND5E.DamageRoll")} (${game.i18n.localize("DND5E.DamageRadiant")})`;
         let roll = new Roll(`${numDice}d8`)
-        roll = await roll.roll({async: true})
+        roll = await roll.roll();
         await roll.toMessage({ flavor: flavor, speaker });
         
 
         if (consume){
             let objUpdate = new Object();
-            objUpdate['data.spells.spell' + slotLevel + '.value'] = chosenSpellSlots.value - 1;
+            objUpdate['system.spells.spell' + slotLevel + '.value'] = chosenSpellSlots.value - 1;
             actor.update(objUpdate);
         }
     }
