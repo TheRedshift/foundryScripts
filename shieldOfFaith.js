@@ -7,10 +7,10 @@
  */
 function getSpellSlots(actor, level, isPact){
     if(isPact == false) {
-        return actor.data.data.spells[`spell${level}`];
+        return actor.system.spells[`spell${level}`];
     }
     else {
-        return actor.data.data.spells.pact;
+        return actor.system.spells.pact;
     }
 }
 
@@ -21,9 +21,9 @@ function getSpellSlots(actor, level, isPact){
  */
 function hasAvailableSlot(actor) {
 	console.log(actor.name);
-	console.log(actor.data.data.spells);
-    for (let slot in actor.data.data.spells) {
-        if (actor.data.data.spells[slot].value > 0) {
+	console.log(actor.system.spells);
+    for (let slot in actor.system.spells) {
+        if (actor.system.spells[slot].value > 0) {
             return true;
         }
     }
@@ -120,7 +120,7 @@ function shieldOfFaith(actor, slotLevel, consume){
 		let shieldOfFaithEffect = {
 			changes: [
 				{
-					key: "data.attributes.ac.value",
+					key: "system.attributes.ac.value",
 					mode: 2,
 					priority: 20,
 					value: "+2"
@@ -129,10 +129,10 @@ function shieldOfFaith(actor, slotLevel, consume){
 			duration: {
 				"seconds": 600,
 			},
-			icon: "systems/dnd5e/icons/spells/protect-sky-2.jpg",
+			icon: "systems/dnd5e/icons/svg/rosa-shield.svg",
 			label: "Shield of Faith"
 		}
-		target.actor.createEmbeddedEntity("ActiveEffect", shieldOfFaithEffect);
+		target.actor.createEmbeddedDocuments("ActiveEffect", [shieldOfFaithEffect]);
 
 		let chatData = {
 			user: game.user._id,
