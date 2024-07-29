@@ -25,7 +25,7 @@ async function doggosAttack(numberOfDoggos) {
     let chatMessages = [];
     for (let i = 0; i < numberOfDoggos; i++) {
         let roll = new Roll(`2d20`);
-        roll = await roll.evaluate({async: true});
+        roll = await roll.evaluate();
         chatMessages.push(
             roll.toMessage({
                 flavor: `Doggo ${i + 1}/${numberOfDoggos} Attacks!`
