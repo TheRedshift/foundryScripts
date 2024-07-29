@@ -8,7 +8,7 @@ new Dialog({
           let target = canvas.tokens.controlled[0]?.actor;
           const save = await target.rollAbilitySave("wis");
           let roll = new Roll(`3d8`);
-          roll = await roll.roll({async: true});
+          roll = await roll.roll();
           await roll.toMessage({
               flavor: "d8 damage",
           });
@@ -18,7 +18,7 @@ new Dialog({
         label: `Yes`,
         callback: async () => {
           let roll = new Roll(`3d12`);
-          roll = await roll.roll({async: true});
+          roll = await roll.roll();
           await roll.toMessage({
               flavor: "d12 damage",
           });
