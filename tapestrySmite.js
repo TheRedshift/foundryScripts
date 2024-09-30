@@ -82,11 +82,11 @@
     /**
      * Gives the spell slot information for a particular actor and spell slot level.
      * @param {Actor5e} actor - the actor to get slot information from.
-     * @param {integer} level - the spell slot level to get information about. level 0 is deprecated.
-     * @returns {object} contains value (number of slots remaining), max, and override.
+     * @param {number} level - the spell slot level to get information about. level 0 is deprecated.
+     * @returns {{value: number, max: number, override: number}} contains value (number of slots remaining), max (the max slots), and override.
      */
     function getSpellSlots(actor, level) {
-        return actor.data.data.spells[`spell${level}`];
+        return actor.system.spells[`spell${level}`];
     }
 
     /**
@@ -95,8 +95,8 @@
      * @returns {boolean} True if any spell slots of any spell level are available to be used.
      */
     function hasAvailableSlot(actor) {
-        for (let slot in actor.data.data.spells) {
-            if (actor.data.data.spells[slot].value > 0) {
+        for (let slot in actor.system.spells) {
+            if (actor.system.spells[slot].value > 0) {
                 return true;
             }
         }
@@ -107,7 +107,7 @@
     /**
      * Use the controlled token to smite the targeted token.
      * @param {Actor5e} actor - the actor that is performing the action.
-     * @param {integer} slotLevel - the spell slot level to use when smiting.
+     * @param {number} slotLevel - the spell slot level to use when smiting.
      * @param {boolean} criticalHit - whether the hit is a critical hit.
      * @param {boolean} consume - whether to consume the spell slot.
      * @param {boolean} improvedSmite - whether the hit does an extra 1d8 from the Paladin class feature
@@ -127,13 +127,13 @@
         if (criticalHit) numDice *= 2;
         const flavor = `Macro Divine Smite - ${game.i18n.localize("DND5E.DamageRoll")} (${game.i18n.localize("DND5E.DamageRadiant")})`;
         let roll = new Roll(`${numDice}d8`)
-        roll = await roll.roll({async: true})
+        roll = await roll.roll();
         await roll.toMessage({ flavor: flavor, speaker });
         
 
         if (consume){
             let objUpdate = new Object();
-            objUpdate['data.spells.spell' + slotLevel + '.value'] = chosenSpellSlots.value - 1;
+            objUpdate['system.spells.spell' + slotLevel + '.value'] = chosenSpellSlots.value - 1;
             actor.update(objUpdate);
         }
     }
